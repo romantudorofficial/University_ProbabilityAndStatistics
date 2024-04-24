@@ -40,4 +40,4 @@ getFirstProbabilitiesGeometric <- function (probability, number)
 probability <- 0.3;
 number <- 10;
 
-getFirstProbabilitiesGeometric(probability, number);
+getFirstProbabilitiesGeometric(probability, number)
