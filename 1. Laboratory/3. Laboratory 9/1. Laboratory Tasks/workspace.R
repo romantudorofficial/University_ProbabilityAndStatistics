@@ -24,7 +24,6 @@ LLN_Student <- function (n_values, degrees_freedom)
 
 n_values <- c(1000, 10000, 100000, 1000000)
 degrees_freedom <- c(2, 3, 4, 5)
-
 results <- sapply(degrees_freedom, function(df) LLN_Student(n_values, df))
 
 print(results)
@@ -42,15 +41,12 @@ CLT_Gamma <- function(N, n, alpha, lambda, z)
   {
 
     samples <- rgamma(n, shape = alpha, rate = lambda)
-
     sample_mean <- mean(samples)
-
     sample_means[i] <- sample_mean
   }
   
   mean_sample_means <- mean(sample_means)
   sd_sample_means <- sd(sample_means)
-  
   z_score <- (mean_sample_means - (alpha / lambda)) / (sd_sample_means / sqrt(n))
   
   return(z_score)
@@ -78,7 +74,6 @@ P_X_greater_than_k <- function(n, p, k)
   }
 
   p_x_less_than_or_equal_to_k <- pbinom(k, size = n, prob = p)
-
   p_x_greater_than_k <- 1 - p_x_less_than_or_equal_to_k
   
   return(p_x_greater_than_k)
@@ -89,9 +84,3 @@ p <- 0.5
 k <- 3
 result <- P_X_greater_than_k(n, p, k)
 print(result)
-
-
-
-### Exercises - During Class
-
-## Exercise ...
