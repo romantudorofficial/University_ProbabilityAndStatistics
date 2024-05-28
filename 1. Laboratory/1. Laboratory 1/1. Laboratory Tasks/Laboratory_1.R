@@ -1,8 +1,12 @@
-### Laboratory 1
+#### Laboratory 1
 
-## Exercises
 
-# Exercise 9
+
+### Exercises - Compulsory
+
+
+
+## Exercise 9
 
 getFirstProbabilitiesPoisson <- function (lambda, number)
 {
@@ -41,3 +45,11 @@ probability <- 0.3;
 number <- 10;
 
 getFirstProbabilitiesGeometric(probability, number)
+
+
+
+### Exercises - During Class
+
+
+
+## ...

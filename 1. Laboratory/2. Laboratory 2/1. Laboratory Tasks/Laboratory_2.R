@@ -1,6 +1,75 @@
 #### Laboratory 2
 
-### Exercises
+
+
+### Exercises - Compulsory
+
+
+
+## Exercise I.3
+
+# Read the data from the CSV file.
+life_expectancy <- read.csv("life_expect.csv");
+
+# Plot histograms for males and females
+par(mfrow = c(2, 1)); # 2 rows, 1 column
+
+# Create the histogram for males.
+hist(life_expectancy$male, breaks = 7, main = "Male Life Expectancy", 
+     xlab = "Life Expectancy", ylab = "Frequency", col = "skyblue");
+
+# Create the histogram for females.
+hist(life_expectancy$female, breaks = 7, main = "Female Life Expectancy", 
+     xlab = "Life Expectancy", ylab = "Frequency", col = "pink");
+
+
+
+## Exercise III.3
+
+sample_data <- read.table("sample2.txt");
+
+
+outliers_mean <- function (sample)
+{
+  mean_val <- mean(sample)
+  sd_val <- sd(sample)
+  
+  lower_threshold <- mean_val - 2 * sd_val
+  upper_threshold <- mean_val + 2 * sd_val
+  
+  outliers <- sample[sample < lower_threshold | sample > upper_threshold]
+  
+  return (outliers)
+}
+
+
+outliers_iqr <- function (sample)
+{
+  q1 <- quantile(sample, 0.25)
+  q3 <- quantile(sample, 0.75)
+  iqr <- q3 - q1
+  
+  lower_threshold <- q1 - 1.5 * iqr
+  upper_threshold <- q3 + 1.5 * iqr
+  
+  outliers <- sample[sample < lower_threshold | sample > upper_threshold]
+  
+  return (outliers)
+}
+
+
+summary(sample_data);
+
+outliers_mean(sample_data);
+
+outliers_iqr(sample_data);
+
+if (outliers_mean(sample_data) == outliers_iqr(sample_data))
+  print("they are the same");
+
+
+
+### - Exercises - During Class
 
 
 
@@ -30,6 +99,8 @@ frecv = c(9, 0 , 12)
 
 
 ## Proposed Exercises
+
+
 
 ## Exercise I.2
 
@@ -74,6 +145,7 @@ limits
 hist(f, breaks = limits)
 
 
+
 ## Exercise II.1
 
 ex21 = function (filename)
@@ -84,6 +156,8 @@ ex21 = function (filename)
 }
 
 ex21("sample1.txt")
+
+
 
 ## Exercise II.2
 
@@ -106,6 +180,7 @@ quantile(x)
 u = as.vector(quantile("sample1.txt"))
 u
 u[2]
+
 
 
 # Exercise III.1
@@ -158,77 +233,6 @@ ex32 = function(x)
   }
   return(y)
 }
-
-
-
-## Exercise I.3
-
-
-# Read the data from the CSV file.
-
-life_expectancy <- read.csv("life_expect.csv");
-
-
-# Plot histograms for males and females
-
-par(mfrow = c(2, 1)); # 2 rows, 1 column
-
-
-# Create the histogram for males.
-
-hist(life_expectancy$male, breaks = 7, main = "Male Life Expectancy", 
-     xlab = "Life Expectancy", ylab = "Frequency", col = "skyblue");
-
-
-# Create the histogram for females.
-
-hist(life_expectancy$female, breaks = 7, main = "Female Life Expectancy", 
-     xlab = "Life Expectancy", ylab = "Frequency", col = "pink");
-
-
-
-## Exercise III.3
-
-sample_data <- read.table("sample2.txt");
-
-
-outliers_mean <- function (sample)
-{
-  mean_val <- mean(sample)
-  sd_val <- sd(sample)
-  
-  lower_threshold <- mean_val - 2 * sd_val
-  upper_threshold <- mean_val + 2 * sd_val
-  
-  outliers <- sample[sample < lower_threshold | sample > upper_threshold]
-  
-  return (outliers)
-}
-
-
-outliers_iqr <- function (sample)
-{
-  q1 <- quantile(sample, 0.25)
-  q3 <- quantile(sample, 0.75)
-  iqr <- q3 - q1
-  
-  lower_threshold <- q1 - 1.5 * iqr
-  upper_threshold <- q3 + 1.5 * iqr
-  
-  outliers <- sample[sample < lower_threshold | sample > upper_threshold]
-  
-  return (outliers)
-}
-
-
-summary(sample_data);
-
-outliers_mean(sample_data);
-
-outliers_iqr(sample_data)
-
-if (outliers_mean(sample_data) == outliers_iqr(sample_data))
-  print("they are the same")
 
 
 

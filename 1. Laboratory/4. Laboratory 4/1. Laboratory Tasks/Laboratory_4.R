@@ -1,12 +1,14 @@
 #### Laboratory 4
 
+
+
 ### Exercises - Compulsory
 
 
 
 ## Exercise I.2
 
-f <- function(x) -2*x^2 + 5*x - 2
+f <- function (x) -2*x^2 + 5*x - 2
 
 a <- 0
 b <- 2
@@ -27,7 +29,7 @@ print(paste("Relative Error:", relative_error))
 
 ## Exercise II.1.b)
 
-f <- function(x)
+f <- function (x)
 {
   return(exp(x))
 }
@@ -51,7 +53,7 @@ cat("Relative Error: ", relative_error, "\n")
 
 ## Exercise II.1.d)
 
-f <- function(x)
+f <- function (x)
 {
   return(1 / (4 * x^2 - 1))
 }
@@ -77,54 +79,79 @@ cat("Relative Error: ", relative_error, "\n")
 
 
 
-
 ## Exercise II.2
 
-N <- 50000
-lambda <- 3
-samples <- rexp(N, rate = lambda)
 
-integrand <- exp(-2 * samples^2)
-integral_estimate <- mean(integrand)
-exact_value <- sqrt(pi / 8)
-relative_error <- abs(integral_estimate - exact_value) / exact_value * 100
+# The improved MC integration function.
 
-print(paste("Estimated Integral Value:", integral_estimate))
-print(paste("Exact Integral Value:", exact_value))
-print(paste("Relative Error (%):", relative_error))
+MC_improved_integration <- function (N)
+{
+  sum = 0
+  
+  for (i in 1:N)
+  {
+    u = rexp(1, 1)
+    sum = sum + exp(-u*u) / exp(-u)
+  }
+  
+  return (sum / N)
+}
+
+
+N = 50000 # number of samples
+
+
+estimated_value = MC_improved_integration(N)
+cat("Estimated value: ", estimated_value, "\n")
+
+exact_value = sqrt(pi / 8)
+cat("Exact value:", exact_value, "\n")
+
+
+absolute_error = abs(estimated_value - exact_value)
+cat("Absolute error:", absolute_error, "\n")
+
+
+relative_error = absolute_error / exact_value
+cat("Relative error:", relative_error, "\n")
 
 
 
 ## Exercise III.2
 
-customers_faster <- 3
-customers_slower <- 1
 
-lambda_faster <- 12
-lambda_slower <- 4
+N <- 10000 # number of samples
 
-prob_faster <- customers_faster / (customers_faster + customers_slower)
 
-mechanic_choice <- runif(1)
+lambda1 <- 4
+lambda2 <- 12
 
-if (mechanic_choice <= prob_faster)
-{
-  service_time <- rexp(1, rate = lambda_faster)
-}else{
-  service_time <- rexp(1, rate = lambda_slower)
-}
 
-expectation_estimate <- service_time
+p1 <- 1/4  # Prob. of being served by the first mechanic
+p2 <- 3/4  # Prob. of being served by the second mechanic
 
-print(paste("Service Time:", service_time))
-print(paste("Estimated Expectation:", expectation_estimate))
 
+mechanic_selection <- sample(c(1, 2), N, replace = TRUE, prob = c(p1, p2))
+service_times <- ifelse(mechanic_selection == 1, rexp(N, lambda1), rexp(N, lambda2))
+
+
+expected_service_time <- mean(service_times)
+cat("Estimated Service Time: ", expected_service_time, "\n")
+
+
+
+## Exercise IV.2
+
+# TO DO
 
 
 
 ### Exercises - During Class
 
+
+
 ## Exercise Solved Exercise
+
 disc_area = function(N)
 {
   N_C = 0;
@@ -141,6 +168,8 @@ disc_area = function(N)
   print(abs(pi-estimate)/abs(pi));
   return (estimate);
 }
+
+
 
 # Exercise I.1
 
@@ -162,6 +191,8 @@ sphere_volume = function(N)
   return (estimate);
 }
 
+
+
 # Exercise II.2
 
 area_under_parabola = function(N)
@@ -181,6 +212,7 @@ area_under_parabola = function(N)
   print(abs(4*pi/3-estimate)/abs(4*pi/3));
   return (estimate);
 } # to be completed
+
 
 
 # Exercise 
@@ -226,6 +258,8 @@ MC_imprvd_integr_average = function(k, N, lambda)
   print(sd(estimates));
 }
 
+
+
 # Exercise II.1.a)
 
 ex_II_1_a = function(N)
@@ -249,7 +283,10 @@ MC_integration_average = function(k, N)
   print(sd(estimates));
 }
 
+
+
 # Ex II.1.c)
+
 ex_II_1_c = function(N, a)
 {
   sum = 0;
@@ -272,11 +309,17 @@ MC_integration_average = function(k, N, a)
 }
 
 
+
 # Ex II.1.b is similar to a... 1-4, compute mean, multiply by 3
+
 # d) -> ...
+
 # II.2 - use improved MC
 
+
+
 # ...
+
 Nr_days = function()
 {
   nr_days = 1;
@@ -299,6 +342,8 @@ MC_nr_days = function(N)
     s = s + Nr_days();
   return(s/N);
 }
+
+
 
 # Exercise III.1
 
@@ -325,7 +370,10 @@ ex_III_1_nr_days = function(N)
   return(s/N);
 }
 
+
+
 # ...
+
 Nr_days_a = function()
 {
   nr_days = 2;
@@ -352,7 +400,9 @@ MC_nr_days_21 = function(N)
 }
 
 
+
 # ...
+
 size_sample = function (epsilon, prob)
 {
   alfa = 1 - prob;
@@ -363,6 +413,8 @@ size_sample = function (epsilon, prob)
 
 epsilon = 0.01;
 prob = 0.99;
-MC_nr_days_21(size_sample(epsilon, prob));
+MC_nr_days_21(size_sample(epsilon, prob))
+
+
 
 # present blue exercises next time

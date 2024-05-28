@@ -1,18 +1,35 @@
 #### Laboratory 5
 
+
+
 ### Exercises - Compulsory
+
+
 
 ## Exercise 1
 
 
-# We suppose that probabilities are strictly positive.
-# use function a runif
-# first, calculate the probabilities
-# first interval is 0 p1, after that p1 + ...
+# Simulate X.
+
+simulate_finite_random_variable <- function (values, probabilities, n)
+{
+  if (length(values) != length(probabilities))
+    stop("The length of values and probabilities must be the same.")
+  
+  if (sum(probabilities) != 1)
+    stop("The probabilities must sum to 1.")
+  
+  sample(values, size = n, replace = TRUE, prob = probabilities)
+}
 
 
+values <- c(1, 2, 3, 4, 5)
+probabilities <- c(0.1, 0.2, 0.3, 0.25, 0.15)
+n <- 1000
 
 
+simulated_samples <- simulate_finite_random_variable(values, probabilities, n)
+head(simulated_samples) # display the first few
 
 
 
@@ -142,4 +159,3 @@ tree_eval = function (i, leaves)
     }
   }
 }
-
