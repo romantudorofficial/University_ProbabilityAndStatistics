@@ -1,4 +1,4 @@
-#### Laboratory 8
+#### Laboratory 2
 
 ### Exercises
 

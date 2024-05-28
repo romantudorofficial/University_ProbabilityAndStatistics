@@ -1,4 +1,4 @@
-### Laboratory 7
+### Laboratory 1
 
 ## Exercises
 

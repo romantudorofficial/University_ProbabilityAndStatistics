@@ -1,4 +1,4 @@
-#### Laboratory 9
+#### Laboratory 3
 
 ### Exercises - Compulsory
 
