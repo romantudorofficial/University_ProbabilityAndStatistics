@@ -142,7 +142,13 @@ cat("Estimated Service Time: ", expected_service_time, "\n")
 
 ## Exercise IV.2
 
-# TO DO
+exercise42 = function ()
+{
+  
+}
+
+
+exercise42()
 
 
 
