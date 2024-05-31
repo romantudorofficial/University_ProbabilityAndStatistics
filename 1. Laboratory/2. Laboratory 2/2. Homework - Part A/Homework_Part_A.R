@@ -1,3 +1,0 @@
-### Homework - Part A
-
-## Exercise 
