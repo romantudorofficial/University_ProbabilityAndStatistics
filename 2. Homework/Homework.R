@@ -183,3 +183,178 @@ remove_outliers_and_plot <- function (file_path, sample_name)
 
 trimmed_sample_P <- remove_outliers_and_plot(file_path, "P")
 trimmed_sample_S <- remove_outliers_and_plot(file_path, "S")
+
+
+
+
+## Homework - Part B - Task B3 - Subtask a)
+
+
+# Define the function.
+
+f <- function (x)
+{
+  (2*x - 1) / (x^2 - x - 6)
+}
+
+
+# Estimate the integral.
+
+integral <- integrate(f, lower = -1, upper = 1)$value
+
+
+# Calculate the exact value.
+
+exact_value <- log(3) - log(2)
+
+
+# Compare the results.
+
+difference <- abs(integral - exact_value)
+
+
+# Print the results.
+
+print(paste("Estimate value:", integral))
+print(paste("Exact value:", exact_value))
+print(paste("Difference:", difference))
+
+
+
+## Homework - Part B - Task B3 - Subtask b)
+
+
+# Define the function.
+
+f <- function (x)
+{
+  (x + 4) / (abs(x - 3) ^ (1 / 3))
+}
+
+
+# Estimate the integral.
+
+integral <- integrate(f, lower = 3, upper = 11)$value
+
+
+# Get the exact value.
+
+exact_value <- 61.2
+
+
+# Compare the results.
+
+difference <- abs(integral - exact_value)
+
+
+# Print the results.
+
+print(paste("Estimate value:", integral))
+print(paste("Exact value:", exact_value))
+print(paste("Difference:", difference))
+
+
+
+## Homework - Part B - Task B3 - Subtask c)
+
+
+# Define the function.
+
+f <- function (x)
+{
+  x * exp(-x^2)
+}
+
+
+# Estimate the integral.
+integral <- integrate(f, lower = 0, upper = Inf)$value
+
+
+# Get the exact value.
+
+exact_value <- 1 / 2
+
+
+# Compare the results.
+
+difference <- abs(integral - exact_value)
+
+
+# Print the results.
+
+print(paste("Estimate value:", integral))
+print(paste("Exact value:", exact_value))
+print(paste("Difference:", difference))
+
+
+
+## Homework - Part B - Task B4 - Subtask a)
+
+
+# Define the parameters.
+
+n <- 1000  # Number of trials (users joining)
+p <- 0.25  # Probability of success (new user joining)
+q <- 0.01  # Probability of user leaving
+
+
+# Number of simulations
+
+num_simulations <- 1000
+
+
+# Simulate the growth of the iSocialize network
+
+simulate_growth <- function()
+{
+  users <- 10000  # Initial number of users
+  years <- 0  # Initial number of years
+  
+  # Simulate growth until the network reaches at least 15000 users
+  while (users < 15000)
+  {
+    # Simulate new users joining
+    new_users <- rbinom(1, n, p)
+    # Simulate users leaving
+    users_left <- sum(rbinom(users, 1, q))
+    # Update the total number of users
+    users <- users + new_users - users_left
+    # Increment the number of years
+    years <- years + 1
+  }
+  
+  return(years)
+}
+
+
+# Perform Monte Carlo simulations to estimate average number of years
+
+years_until_15000 <- replicate(num_simulations, simulate_growth())
+average_years <- mean(years_until_15000)
+
+
+# Print the estimated average number of years
+
+print(paste("Estimated average number of years until iSocialize reaches at least 15000 users:", average_years))
+
+
+# Simulate the growth after 40 years and 10 months
+
+years <- 40 + 10/12
+users <- 10000
+for (i in 1:years)
+{
+  new_users <- rbinom(1, n, p)
+  users_left <- sum(rbinom(users, 1, q))
+  users <- users + new_users - users_left
+}
+
+
+# Check if the network has at least 15000 users
+
+prob_15000 <- ifelse(users >= 15000, 1, 0)
+
+
+# Print the estimated probability
+
+print(paste("Estimated probability that the network will have at least 15000 users after 40 years and 10 months:", prob_15000))
