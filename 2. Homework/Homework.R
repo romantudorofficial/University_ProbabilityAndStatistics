@@ -6,7 +6,7 @@
 
 
 
-## Homework - Part A - Task A1 - Subtask a)
+## Homework - Part A - Task A1 - Subtask a) (1 point)
 
 
 # Define the function.
@@ -46,7 +46,7 @@ prob_binomial <- compute_probabilities("binomial", list(n = n, p = p), k, m)
 
 
 
-## Homework - Part A - Task A1 - Subtask b)
+## Homework - Part A - Task A1 - Subtask b) (1 point)
 
 
 # Define the function.
@@ -67,7 +67,7 @@ plot_probabilities(prob_binomial)
 
 
 
-## Homework - Part A - Task A1 - Subtask c)
+## Homework - Part A - Task A1 - Subtask c) (0.5 points)
 
 
 # Define the function.
