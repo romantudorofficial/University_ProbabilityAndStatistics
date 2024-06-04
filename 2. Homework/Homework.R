@@ -11,45 +11,50 @@
 
 # Define the function.
 
-computeProbabilities <- function (distribution, parameters, k, m)
+computeProbabilities <- function (lambda, p, n, m, k)
 {
   # Poisson Distribution
-  if (distribution == "poisson")
-    probabilities <- dpois(k:m, lambda = parameters)
+  poissonProbabilities <- dpois(k:m, lambda)
   
   # Geometric Distribution
-  else if (distribution == "geometric")
-    probabilities <- dgeom(k:m, prob = parameters)
+  geometricProbabilities <- dgeom(k:m, p)
   
   # Binomial Distribution
-  else
-    probabilities <- dbinom(k:m, size = parameters$n, prob = parameters$p)
+  binomialProbabilities <- dbinom(k:m, n, p)
   
-  return (probabilities)
+  # Return the results.
+  return(list(poissonProbabilities = poissonProbabilities,
+              geometricProbabilities = geometricProbabilities,
+              binomialProbabilities = binomialProbabilities))
 }
 
 
-# Define the parameters.
+# Define the test function.
 
-lambda <- 2
-p <- 0.3
-n <- 10
-m <- 5
-k <- 0
+testComputeProbabilities <- function ()
+{
+  # Define the parameters.
+  lambda <- 2
+  p <- 0.3
+  n <- 10
+  m <- 5
+  k <- 0
+  
+  # Calculate the results.
+  poissonProbabilities <- computeProbabilities(lambda, p, n, m, k) $ poissonProbabilities
+  geometricProbabilities <- computeProbabilities(lambda, p, n, m, k) $ geometricProbabilities
+  binomialProbabilities <- computeProbabilities(lambda, p, n, m, k) $ binomialProbabilities
+  
+  # Print the results.
+  cat("\n\tPoisson Probabilities:\n\n", poissonProbabilities,
+      "\n\n\n\tGeometric Probabilities:\n\n", geometricProbabilities,
+      "\n\n\n\tBinomial Probabilities:\n\n", binomialProbabilities, "\n\n")
+}
 
 
-# Calculate the results.
+# Test the function.
 
-poissonProbabilities <- computeProbabilities("poisson", lambda, k, m)
-geometricProbabilities <- computeProbabilities("geometric", p, k, m)
-binomialProbabilities <- computeProbabilities("binomial", list(n = n, p = p), k, m)
-
-
-# Print the results.
-
-print(poissonProbabilities)
-print(geometricProbabilities)
-print(binomialProbabilities)
+testComputeProbabilities()
 
 
 
@@ -58,25 +63,44 @@ print(binomialProbabilities)
 
 # Define the functions.
 
-drawProbabilites <- function (probabilities, distribution)
+drawProbabilites <- function (lambda, p, n, m, k)
 {
-  plot(probabilities, type = "h", lwd = 10,
-       xlab = "k", ylab = "Probability",
-       main = distribution)
+  # Calculate the probabilities.
+  probabilities <- computeProbabilities(lambda, p, n, m, k)
+  
+  # Poisson Distribution
+  plot(probabilities $ poissonProbabilities, type = "h", lwd = 10,
+       xlab = "k", ylab = "Probability", main = "Poisson")
+  
+  # Geometric Distribution
+  plot(probabilities $ geometricProbabilities, type = "h", lwd = 10,
+       xlab = "k", ylab = "Probability", main = "Geometric")
+  
+  # Binomial Distribution
+  plot(probabilities $ binomialProbabilities, type = "h", lwd = 10,
+       xlab = "k", ylab = "Probability", main = "Binomial")
 }
 
 
-drawAll <- function ()
+# Define the test function.
+
+testDrawProbabilites <- function ()
 {
-  drawProbabilites(poissonProbabilities, "Poisson")
-  drawProbabilites(geometricProbabilities, "Geometric")
-  drawProbabilites(binomialProbabilities, "Binomial")
+  # Define the parameters.
+  lambda <- 2
+  p <- 0.3
+  n <- 10
+  m <- 5
+  k <- 0
+  
+  # Get the results.
+  drawProbabilites(lambda, p, n, m, k)
 }
 
 
-# Display the graphs.
+# Test the function.
 
-drawAll()
+testDrawProbabilites()
 
 
 
@@ -96,11 +120,19 @@ findLeastValue <- function (lambda)
 }
 
 
+# Define the test function.
+
+testFindLeastValue <- function ()
+{
+  lambda <- 2
+  result <- findLeastValue(lambda)
+  cat("\n\tResult:\n\n\t\t", result, "\n\n")
+}
+
+
 # Test the function.
 
-lambda <- 2
-result <- findLeastValue(lambda)
-cat("\n\tResult: ", result, "\n\n")
+testFindLeastValue()
 
 
 
@@ -197,7 +229,7 @@ getOutliers <- function (fileName, sampleName)
   # Remove the outliers.
   trimmedSample <- sample[sample >= lowerBound & sample <= upperBound]
   
-  # Plot frequency distributions
+  # Plot the frequency distributions.
   breaks <- seq(0, 10, 1)
   sampleName <- ifelse(sampleName == "S", "Statistics", "Probability")
   
@@ -214,13 +246,15 @@ getOutliers <- function (fileName, sampleName)
 
 testGetOutliers <- function ()
 {
-  trimmedSampleProbability <- getOutliers(fileName, "P")
-  cat("\n\tThe Trimmed Sample for Probability:\n\n",
-      trimmedSampleProbability)
+  # Get the results.
+  trimmedSampleProbability <- getOutliers("note_PS.csv", "P")
+  trimmedSampleStatistics <- getOutliers("note_PS.csv", "S")
   
-  trimmedSampleStatistics <- getOutliers(fileName, "S")
-  cat("\n\n\n\tThe Trimmed Sample for Statistics:\n\n",
-      trimmedSampleProbability, "\n\n")
+  # Display the results.
+  cat("\n\tThe Trimmed Sample for Probability:\n\n",
+      trimmedSampleProbability,
+      "\n\n\n\tThe Trimmed Sample for Statistics:\n\n",
+      trimmedSampleStatistics, "\n\n")
 }
 
 
@@ -241,10 +275,8 @@ estimateAndCompare <- function (functionName)
   # Estimate the value.
   estimatedValue <- integrate(functionName, lower = -1, upper = 1)$value
   
-  
   # Calculate the exact value.
   exactValue <- log(3) - log(2)
-  
   
   # Compare the results.
   difference <- abs(estimatedValue - exactValue)
@@ -368,76 +400,107 @@ testEstimateAndCompare()
 
 
 
-## Homework - Part B - Task B4 - Subtask a)
+## Homework - Part B - Task B4 - Subtask a) (2 points)
 
 
-# Define the parameters.
+# Define the function.
 
-n <- 1000  # Number of trials (users joining)
-p <- 0.25  # Probability of success (new user joining)
-q <- 0.01  # Probability of user leaving
-
-
-# Number of simulations
-
-num_simulations <- 1000
-
-
-# Simulate the growth of the iSocialize network
-
-simulate_growth <- function()
+estimateYears <- function (initialUsers, n, p, q, targetUsers, numberOfSimulations)
 {
-  users <- 10000  # Initial number of users
-  years <- 0  # Initial number of years
-  
-  # Simulate growth until the network reaches at least 15000 users
-  while (users < 15000)
+  simulateGrowth <- function ()
   {
-    # Simulate new users joining
-    new_users <- rbinom(1, n, p)
-    # Simulate users leaving
-    users_left <- sum(rbinom(users, 1, q))
-    # Update the total number of users
-    users <- users + new_users - users_left
-    # Increment the number of years
-    years <- years + 1
+    currentUsers <- initialUsers
+    years <- 0
+    
+    while (currentUsers < targetUsers)
+    {
+      newUsers <- rbinom(1, n, p)
+      leavingUsers <- rbinom(1, currentUsers, q)
+      currentUsers <- currentUsers + newUsers - leavingUsers
+      years <- years + 1
+    }
+    
+    return (years)
   }
   
-  return(years)
+  yearsUntilTarget <- replicate(numberOfSimulations, simulateGrowth())
+  
+  return(mean(yearsUntilTarget))
 }
 
 
-# Perform Monte Carlo simulations to estimate average number of years
+# Define the test function.
 
-years_until_15000 <- replicate(num_simulations, simulate_growth())
-average_years <- mean(years_until_15000)
-
-
-# Print the estimated average number of years
-
-print(paste("Estimated average number of years until iSocialize reaches at least 15000 users:", average_years))
-
-
-# Simulate the growth after 40 years and 10 months
-
-years <- 40 + 10/12
-users <- 10000
-for (i in 1:years)
+testEstimateYears <- function ()
 {
-  new_users <- rbinom(1, n, p)
-  users_left <- sum(rbinom(users, 1, q))
-  users <- users + new_users - users_left
+  initialUsers <- 10000
+  n <- 1000
+  p <- 0.25
+  q <- 0.01
+  targetUsers <- 15000
+  numberOfSimulations <- 1000
+  
+  result <- estimateYears(initialUsers, n, p, q, targetUsers, numberOfSimulations)
+  
+  cat("\n\tResult:\n\n\t\t", result, "\n\n")
 }
 
 
-# Check if the network has at least 15000 users
+# Test the function.
 
-prob_15000 <- ifelse(users >= 15000, 1, 0)
+testEstimateYears()
 
 
-# Print the estimated probability
 
-print(paste("Estimated probability that the network will have at least 15000 users after 40 years and 10 months:", prob_15000))
+## Homework - Part B - Task B4 - Subtask b) (1 point)
+
+
+# define the function.
+
+estimateProbability <- function (initialUsers, n, p, q, years, targetUsers, numberOfSimulations)
+{
+  simulateGrowth <- function ()
+  {
+    currentUsers <- initialUsers
+    months <- years * 12
+    
+    for (i in 1 : months)
+    {
+      newUsers <- rbinom(1, round(n / 12), p)
+      leavingUsers <- rbinom(1, currentUsers, q / 12)
+      currentUsers <- currentUsers + newUsers - leavingUsers
+    }
+    
+    return (currentUsers)
+  }
+  
+  currentUsers <- replicate(numberOfSimulations, simulateGrowth())
+  
+  return(mean(currentUsers >= targetUsers))
+}
+
+
+# Define the test function.
+
+testEstimateProbability <- function ()
+{
+  initialUsers <- 10000
+  n <- 1000
+  p <- 0.25
+  q <- 0.01
+  years <- 40 + 10 / 12
+  targetUsers <- 15000
+  numberOfSimulations <- 1000
+  
+  result <- estimateProbability(initialUsers, n, p, q, years, targetUsers, numberOfSimulations)
+  
+  cat("\n\tResult:\n\n\t\t", result, "\n\n")
+}
+
+
+# Test the function.
+
+testEstimateProbability()
 
 
 
@@ -552,3 +615,54 @@ getConfidenceIntervals <- function ()
 # Test the function.
 
 getConfidenceIntervals()
+
+
+
+
+## Homework - Part D - Task D3 (2 points)
+
+
+# Define the function.
+
+getChangeConclusion <- function ()
+{
+  # Get the given data.
+  proportionUnableBefore <- 0.15
+  sampleSize <- 100
+  studentsUnableAfter <- 14
+  
+  # Calculate the after proportion.
+  proportionUnableAfter <- studentsUnableAfter / sampleSize
+  
+  # Calculate the standard error.
+  standardError <- sqrt((proportionUnableBefore * (1 - proportionUnableBefore))
+                        / sampleSize)
+  
+  # Calculate the test static.
+  testStatic <- (proportionUnableBefore - proportionUnableAfter) / standardError
+  
+  # Calculate the critical values.
+  criticalValue1 <- qnorm(0.99)
+  criticalValue5 <- qnorm(0.95)
+  
+  # Establish the conclusions.
+  if (testStatic > criticalValue1)
+    change1 = "effective"
+  else
+    change1 = "not effective"
+  
+  if (testStatic > criticalValue5)
+    change5 = "effective"
+  else
+    change5 = "not effective"
+  
+  # Print the results.
+  cat("\n\tAt 1% significance level, the change was:\n\n\t\t", change1,
+      "\n\n\n\tAt 5% significance level, the change was:\n\n\t\t", change5,
+      "\n\n")
+}
+
+
+# Test the function.
+
+getChangeConclusion()
